@@ -1,7 +1,8 @@
 raspandmax
 ==========
 
-Use with Raspberry pi or compatible SPI controllers.
+Use with Raspberry pi or compatible SPI controllers and MAX1202, MAX1203 and MAX1204.
+See schematic.png!
 Compile with: cc -o raspandmax raspandmax.c
 Run with root privileges sudo ./raspandmax
 
