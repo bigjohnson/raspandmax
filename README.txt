@@ -21,7 +21,7 @@ sudo groupadd spi
 sudo usermod -a -G spi pi
 sudo su 
 echo '"KERNELS=="spi0", SUBSYSTEMS=="spi_master", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
-exit
+reboot
 
 that add the spi group and add to it the pi user.
 The last line add a udev rule that assign the spi group to the SPI bus.
