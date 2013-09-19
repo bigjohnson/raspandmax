@@ -20,7 +20,9 @@ If you want run the program without root privileges you can execute these comman
 sudo groupadd spi
 sudo usermod -a -G spi pi
 sudo su 
+========= d'ont work with latest system images ========= 
 echo '"KERNELS=="spi0", SUBSYSTEMS=="spi_master", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
+======================================================== 
 reboot
 
 that add the spi group and add to it the pi user.
