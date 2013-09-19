@@ -12,6 +12,9 @@ To enable the SPI interface you must modify the file
 commenting this line
 #blacklist spi-bcm2708
 
+Compile with: cc -o raspandmax raspandmax.c
+Run with root privileges sudo ./raspandmax
+
 If you want run the program without root privileges you can execute these command
 
 sudo groupadd spi
