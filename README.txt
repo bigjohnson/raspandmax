@@ -15,12 +15,14 @@ commenting this line
 Compile with: cc -o raspandmax raspandmax.c
 Run with root privileges sudo ./raspandmax
 
+
+========= d'ont work with latest system images ========= 
 If you want run the program without root privileges you can execute these command
 
 sudo groupadd spi
 sudo usermod -a -G spi pi
 sudo su 
-========= d'ont work with latest system images ========= 
+========= here is the problem! ========= 
 echo '"KERNELS=="spi0", SUBSYSTEMS=="spi_master", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
 ======================================================== 
 reboot
@@ -30,6 +32,7 @@ The last line add a udev rule that assign the spi group to the SPI bus.
 In that manner you can run the program
 ./raspandmax
 without sudo
+======================================================== 
 
 Your comments and suggestion are welcomed to alberto[at]panu.it
 
