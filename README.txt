@@ -16,15 +16,13 @@ Compile with: cc -o raspandmax raspandmax.c
 Run with root privileges sudo ./raspandmax
 
 
-========= d'ont work with latest system images ========= 
 If you want run the program without root privileges you can execute these command
 
 sudo groupadd spi
 sudo usermod -a -G spi pi
 sudo su 
-========= here is the problem! ========= 
-echo '"KERNELS=="spi0", SUBSYSTEMS=="spi_master", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
-======================================================== 
+echo 'DEVPATH=="/devices/platform/bcm2708_spi.0/spi_master/spi0/spi0.0/spidev/spidev0.0", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
+echo 'DEVPATH=="/devices/platform/bcm2708_spi.0/spi_master/spi0/spi0.1/spidev/spidev0.1", GROUP="spi"' >> /etc/udev/rules.d/99-spi.rules
 reboot
 
 that add the spi group and add to it the pi user.
