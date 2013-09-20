@@ -26,11 +26,10 @@ echo 'DEVPATH=="/devices/platform/bcm2708_spi.0/spi_master/spi0/spi0.1/spidev/sp
 reboot
 
 that add the spi group and add to it the pi user.
-The last line add a udev rule that assign the spi group to the SPI bus.
+The last two lines add a udev rule that assign the spi group to the SPI bus.
 In that manner you can run the program
 ./raspandmax
 without sudo
-======================================================== 
 
 Your comments and suggestion are welcomed to alberto[at]panu.it
 
