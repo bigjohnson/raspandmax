@@ -31,6 +31,8 @@
 #include <linux/spi/spidev.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+#define MAX1202_3_lsb 0.001
+#define MAX124_lsb 0.004
 
 static const char *device = "/dev/spidev0.0";
 static uint8_t mode = SPI_MODE_0;
@@ -44,6 +46,9 @@ static uint8_t unipolar = 8;
 static uint8_t single = 4;
 static uint8_t clock = 3;
 static uint8_t newline = 1;
+static uint16_t bipolarconvert = 2047;
+static float lsb = MAX1202_3_lsb;
+static float fullscale = 0;
 static uint8_t chip = 0 ; // chip type: 
 //			     0 for MAX1202 and MAX 1203
 //			     1 for MAX1204
@@ -80,11 +85,14 @@ static void print_usage(const char *prog)
 		"\n"
 		" Usage:\n"
 		" -4 --max1204 select max1204 10 bit adc, default is max1202/3 12 bit\n"
+		" -f --full full scale value, default are:\n"
+		"      0 to 4.095 volt for unipolar mode\n"
+		"      -2.048 to 2.047 volt for bipolar mode\n"
 		" -D --device device to use (default /dev/spidev0.0)\n"
 		" -s --speed SPI bus speed (Hz), default 500000\n"
 		" -c --chipsel disable chipsel at read end, default don't disable\n"
 		" -i --input chose input channel 0 to 7, default 0\n"
-		" -b --bipolar set to bipolar mode, default unipolar, you need a -5V"
+		" -b --bipolar set to bipolar mode, default unipolar, you need a -5V\n"
 		"      power supply on pin 9!\n"
 		" -k --clock set internal clock mode, default external\n"
 		" -v --verbose print extra info usefoul for debug\n"
@@ -112,9 +120,6 @@ static void print_usage(const char *prog)
 		"       ---------------\n"
 		"      |   7   | 7 | 6 |\n"
 		"       ---------------\n"
-		" Output:\n"
-		" 0 to 4095 for MAX1202 and MAX1203\n"
-		" 0 to 1203 for max 1204\n"
 	);
 	exit(1);
 }
@@ -124,6 +129,7 @@ static void parse_opts(int argc, char *argv[])
 	while (1) {
 		static const struct option lopts[] = {
 			{ "input", 1, 0,'i' },
+			{ "full", 1, 0, 'f' },
 			{ "help", 0, 0, 'h' },
 			{ "speed", 1, 0, 's' },
 			{ "device", 1, 0, 'D' },
@@ -137,7 +143,7 @@ static void parse_opts(int argc, char *argv[])
 		};
 		int c;
 
-		c = getopt_long(argc, argv, "i:s:D:v4hbdkn", lopts, NULL);
+		c = getopt_long(argc, argv, "i:s:f:D:v4hbdkn", lopts, NULL);
 
 		if (c == -1)
 		break;
@@ -150,6 +156,10 @@ static void parse_opts(int argc, char *argv[])
 
 			case 'i':
 			input = atoi(optarg);
+			break;
+
+			case 'f':
+			fullscale = atof(optarg);
 			break;
 
 			case 's':
@@ -309,12 +319,12 @@ int main(int argc, char *argv[])
 
 	transmitbyte |= inputtable[input];
 
-		if ( unipolar ) {
-			if ( verbose ) {
+	if ( unipolar ) {
+		transmitbyte |= unipolar;
+		if ( verbose ) {
 			printf("unipolar mode\n");
 		}
-		transmitbyte |= unipolar;
-		} else {
+	} else {
 		if ( verbose ) {
 			printf("bipolar mode\n");
 		}
@@ -415,24 +425,46 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	unsigned long lettura;
+	signed long lettura;
 
 	if ( chip ) {
 		lettura = third_byte >> 5;
 		lettura |= second_byte << 3;
+		bipolarconvert = 511;
+		lsb = MAX124_lsb;
 	} else {
 		lettura = third_byte >> 3; 
 		lettura |= second_byte << 5;	
 	}
+	if ( !unipolar ) {
+		if ( verbose ) {
+               		printf("unipolar algorithm\n");
+       		}
+		if ( lettura > bipolarconvert ) {
+			lettura &= bipolarconvert;
+			lettura -= bipolarconvert;
+			lettura -= 1;
+			if ( verbose ) {
+				printf("Negative vaule");
+                	}
+		}	
+	}
 
+
+	float volt = lettura * lsb;
+	if ( fullscale ) {
+		volt = volt * fullscale / 4.096;
+		if ( verbose ) {
+        		printf("Fullscale is %f\n", fullscale);
+        	}
+	}
 	if ( verbose ) {
 		printf("Analog read: ");
 	}
-
-	printf("%d", lettura);
-	
-if ( newline || verbose ) {
+		printf("%f", volt);
+	if ( newline || verbose ) {
 		printf("\n");
 	}
 
 }
+
