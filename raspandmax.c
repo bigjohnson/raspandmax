@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
 	if ( verbose ) {
 		printf("Analog read: ");
 	}
-		printf("%f", volt);
+	printf("%f", volt);
 	if ( newline || verbose ) {
 		printf("\n");
 	}
