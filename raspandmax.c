@@ -46,6 +46,7 @@ static uint8_t unipolar = 8;
 static uint8_t single = 4;
 static uint8_t clock = 3;
 static uint8_t newline = 1;
+static uint8_t raw = 0;
 static uint16_t bipolarconvert = 2047;
 static float lsb = MAX1202_3_lsb;
 static float fullscale = 0;
@@ -96,6 +97,7 @@ static void print_usage(const char *prog)
 		"      power supply on pin 9!\n"
 		" -k --clock set internal clock mode, default external\n"
 		" -v --verbose print extra info usefoul for debug\n"
+		" -r --raw raw mode ouput\n"
 		" -n --newline suppress new line at non verbose output end\n"
 		" -d --diff set to differential mode,\n"
 		"      default is single ended, see table\n"
@@ -134,6 +136,7 @@ static void parse_opts(int argc, char *argv[])
 			{ "speed", 1, 0, 's' },
 			{ "device", 1, 0, 'D' },
 			{ "verbose", 0, 0, 'v' },
+			{ "raw", 0, 0, 'r' },
 			{ "max1204", 0, 0, '4' },
 			{ "bipolar", 0, 0, 'b' },
 			{ "diff", 0, 0, 'd' },
@@ -143,7 +146,7 @@ static void parse_opts(int argc, char *argv[])
 		};
 		int c;
 
-		c = getopt_long(argc, argv, "i:s:f:D:v4hbdkn", lopts, NULL);
+		c = getopt_long(argc, argv, "i:s:f:D:v4hbdknr", lopts, NULL);
 
 		if (c == -1)
 		break;
@@ -169,6 +172,10 @@ static void parse_opts(int argc, char *argv[])
 			case 'v':
 			verbose = 1;
 			break;
+
+			case 'r':
+			raw = 1;
+			break;	
 
 			case '4':
 			chip = 1;
@@ -458,10 +465,17 @@ int main(int argc, char *argv[])
         		printf("Fullscale is %f\n", fullscale);
         	}
 	}
-	if ( verbose ) {
-		printf("Analog read: ");
+	if ( raw ) {
+		if ( verbose ) {
+			printf("Raw read: ");
+		}
+		printf("%d", lettura);
+	} else {
+		if ( verbose ) {
+			printf("Analog read: ");
+		}
+		printf("%f", volt);
 	}
-	printf("%f", volt);
 	if ( newline || verbose ) {
 		printf("\n");
 	}
