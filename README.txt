@@ -6,7 +6,7 @@ See schematic.png!
 
 Compile with: cc -o raspandmax raspandmax.c
 Run with root privileges sudo ./raspandmax
-Tested with 2013-09-10-wheezy-raspbian linux.
+Tested with 2013-09-25-wheezy-raspbian linux.
 
 To enable the SPI interface you must modify the file
 /etc/modprobe.d/raspi-blacklist.conf
