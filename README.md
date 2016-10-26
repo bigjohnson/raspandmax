@@ -2,7 +2,7 @@
 
 ## Use with Raspberry pi or compatible SPI controllers and MAX1202, MAX1203 and MAX1204.
 
-See schematic.png!
+![See schematic.png!](https://github.com/bigjohnson/raspandmax/blob/master/schema.png?raw=true)
 
 Compile with: cc -o raspandmax raspandmax.c
 
