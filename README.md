@@ -1,5 +1,4 @@
 # raspandmax
-==========
 
 ## Use with Raspberry pi or compatible SPI controllers and MAX1202, MAX1203 and MAX1204.
 
