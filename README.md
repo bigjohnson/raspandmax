@@ -1,31 +1,46 @@
-raspandmax
+# raspandmax
 ==========
 
-Use with Raspberry pi or compatible SPI controllers and MAX1202, MAX1203 and MAX1204.
+## Use with Raspberry pi or compatible SPI controllers and MAX1202, MAX1203 and MAX1204.
+
 See schematic.png!
 
 Compile with: cc -o raspandmax raspandmax.c
+
 Run with root privileges sudo ./raspandmax
+
 Tested with 2013-09-25-wheezy-raspbian linux.
 
 To enable the SPI interface you must modify the file
+
 /etc/modprobe.d/raspi-blacklist.conf
+
 commenting this line
+
 #blacklist spi-bcm2708
 
 If you want run the program without root privileges you can execute these command
 
 sudo groupadd spi
+
 sudo usermod -a -G spi pi
+
 sudo su 
+
 echo 'DEVPATH=="/devices/platform/bcm2708_spi.0/spi_master/spi0/spi0.0/spidev/spidev0.0", GROUP="spi"' > /etc/udev/rules.d/99-spi.rules
+
 echo 'DEVPATH=="/devices/platform/bcm2708_spi.0/spi_master/spi0/spi0.1/spidev/spidev0.1", GROUP="spi"' >> /etc/udev/rules.d/99-spi.rules
+
 reboot
 
 that add the spi group and add to it the pi user.
+
 The last two lines add a udev rule that assign the spi group to the SPI bus.
+
 In that manner you can run the program
+
 ./raspandmax
+
 without sudo
 
 Your comments and suggestion are welcomed to alberto[at]panu.it
