@@ -48,4 +48,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ![image](https://github.com/bigjohnson/GitHubAssets/blob/master/raspandmax/1.png?raw=true)
 
-![Image](https://github.com/bigjohnson/GitHubAssets/blob/master/raspandmax/1.png?raw=true)
+![Image](https://github.com/bigjohnson/GitHubAssets/blob/master/raspandmax/2.png?raw=true)
